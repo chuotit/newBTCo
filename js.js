@@ -129,6 +129,7 @@
                 returnBetButton();
             };
 
+            var loseList = [];
             $('#balance').bind('DOMSubtreeModified', function (e) {
                 if ($(e.currentTarget).is(':contains(".")') && $scope.onBetting) {
                     returnBetSpeedAutoPlay();
@@ -137,40 +138,54 @@
                         var btcOld = $scope.btcAfter;
                         $scope.btcAfter = $('#balance').text();
                         $scope.btcIncrement = (($scope.btcAfter * 1).toFixed(8) - ($scope.btcBefore * 1).toFixed(8)).toFixed(8);
-
                         var index = $scope.lossIndex;
-                        if($scope.onBetting) {
-                            $scope.boyBetStyle = {
-                                'overflow': 'hidden'
-                            };
-                        } else {
-                            $scope.boyBetStyle = {};
-                        }
-                        
+
                         if (btcOld < $scope.btcAfter || $scope.btcLimitBet < $scope.btcForBet) {
-                            getOnBetList();
-                            $scope.lossIndex = 1;
-                            $scope.winFlg = true;
                             if ($scope.pauseOnWin) {
                                 $scope.onBetting = false;
                             }
+                            
+                            if ($scope.lossIndex > $scope.betProbe / 2) {
+                                loseList.push({
+                                    value: $scope.lossIndex
+                                });
+                            }
+                            if (loseList.length > 45) {
+                                loseList = loseList.slice(1, loseList.length);
+                            }
+
+                            getOnBetList();
+                            $scope.lossIndex = 1;
+                            $scope.winFlg = true;
+
                             $scope.btcForBet = $scope.btcBase;
                             document.getElementById('line1').scrollIntoView(true);
                             returnBetButton();
                         } else {
-                            $scope.onMaxBet = $scope.lossIndex > $scope.onMaxBet ? $scope.lossIndex : $scope.onMaxBet;
+                            if ($scope.lossIndex > $scope.onMaxBet) {
+                                $scope.onMaxBet = $scope.lossIndex;
+                            }
+
                             $scope.onBtcMaxBet = $scope.btcForBet > $scope.onBtcMaxBet ? $scope.btcForBet : $scope.onBtcMaxBet;
                             $scope.btcForBet = returnCurrentBtcBet($scope.lossIndex, $scope.btcForBet);
                             document.getElementById('line' + ($scope.lossIndex)).scrollIntoView(true);
                             returnBetButton();
                         }
-                        $scope.winFlg = Math.random() >= .6;
-                        if($scope.winFlg) {
-                            $scope.lossIndex = 1;
-                        }
-                        console.log($scope.winFlg);
+                        // $scope.winFlg = Math.random() >= .8;
+                        // if ($scope.winFlg) {
+                        //     if ($scope.lossIndex > $scope.betProbe / 2) {
+                        //         loseList.push({
+                        //             value: $scope.lossIndex
+                        //         });
+                        //     }
+                        //     if (loseList.length > 10) {
+                        //         loseList = loseList.slice(1, loseList.length)
+                        //     }
+                        //     $scope.lossIndex = 1;
+                        // }
+                        $scope.loseList = loseList;
                     }, 200);
-                    // $scope.$apply();
+                    $scope.$apply();
                 }
             });
 
@@ -267,11 +282,11 @@
                 }
             }
 
-            $scope.requestBet = function () {
-                var random_boolean = Math.random() >= 0.5;
-                $scope.btcAfter = random_boolean? ($scope.btcAfter * 1 - $scope.btcPlus * 1).toFixed(8):($scope.btcAfter * 1 + $scope.btcPlus * 1).toFixed(8);
-                $('#balance').text($scope.btcAfter);
-            };
+            // $scope.requestBet = function () {
+            //     var random_boolean = Math.random() >= 0.5;
+            //     $scope.btcAfter = random_boolean ? ($scope.btcAfter * 1 - $scope.btcPlus * 1).toFixed(8) : ($scope.btcAfter * 1 + $scope.btcPlus * 1).toFixed(8);
+            //     $('#balance').text($scope.btcAfter);
+            // };
         }
     }]);
 })();

@@ -5,6 +5,7 @@
 .clear {
     clear: both;
 }
+
 body {
     min-height: 800px;
 }
@@ -205,5 +206,39 @@ body {
     .btc-display {
         font-size: 13px;
         font-weight: bold;
+    }
+    .chart-lose {
+        margin-top: 20px;
+        text-align: center;
+        .lose-list {
+            display: inline;
+            vertical-align: bottom;
+            .lose-item {
+                display: inline-block;
+                width: 20px;
+                background: #f9c9ce;
+                border: 1px solid #df9da4;
+                margin-left: -1px;
+                position: relative;
+                &.first-child {
+                    margin-left: 0;
+                }
+                span {
+                    display: block;
+                    position: absolute;
+                    top: -16px;
+                    font-weight: bold;
+                    font-size: 10px;
+                    text-align: center;
+                    left: -1px;
+                    right: -1px;
+                }
+            }
+        }
+        @for $i from 1 through 180 {
+            .item-#{$i} {
+                height:  0px + $i
+            }
+        }
     }
 }

@@ -204,6 +204,13 @@
 				</div>
 			</div>
 		</div>
+		<div class="chart-lose">
+			<ul class="lose-list item-{{onMaxBet + 10}}">
+				<li ng-repeat="item in loseList" class="lose-item item-{{item.value}}">
+					<span>{{item.value}}</span>
+				</li>
+			</ul>
+		</div>
 	</div>
 	<div style="position: absolute; top: 0; right: 0;">
 		<div class="row manual_bet_element" style="margin:0; padding:0;">
